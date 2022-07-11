@@ -2,7 +2,7 @@ require('../mocks/fetchSimulator');
 const { fetchProducts } = require('../helpers/fetchProducts');
 const computadorSearch = require('../mocks/search');
 
-describe('1 - fetchProducts function test', () => {
+describe('1 - fetchProducts function tests', () => {
   it('should be a function', () => {
     expect(typeof fetchProducts).toEqual('function');
   })
