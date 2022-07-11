@@ -6,9 +6,9 @@ describe('1 - fetchProducts function tests', () => {
   it('should be a function', () => {
     expect(typeof fetchProducts).toEqual('function');
   })
-  it('should call fetch when "computador" is set as the argument', () => {
+  it('should call fetch when "computador" is set as the argument', async () => {
     expect.assertions(1);
-    fetchProducts('computador');
+    await fetchProducts('computador');
     expect(fetch).toHaveBeenCalledTimes(1);
   })
   it('should return "computadorSearch" data structure correctly', async () => {
