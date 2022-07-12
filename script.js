@@ -26,7 +26,34 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = ({ target }) => target.remove();
+const getItemData = async (endPoint) => {
+  const data = await fetchItem(endPoint);
+  return data;
+};
+
+const getCart = () => document.querySelector('.cart__items');
+
+const getCartPrice = () => {
+  const pricesArr = [];
+  const cartItems = document.querySelectorAll('.cart__item');
+  cartItems.forEach((item) => {
+    const price = item.innerText.split('$');
+    pricesArr.push(Number(price[1]));
+  });
+  return pricesArr;
+};
+
+const sumPrices = () => {
+  const priceSection = document.querySelector('.total-price');
+  const prices = getCartPrice();
+  const total = prices.reduce((acc, curr) => acc + Number(curr), 0);
+  priceSection.innerText = `${total}`;
+};
+
+const cartItemClickListener = ({ target }) => {
+  target.remove();
+  sumPrices();
+}; 
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
@@ -36,19 +63,22 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-const getItemData = async (endPoint) => {
-  const data = await fetchItem(endPoint);
-  return data;
-};
-
-const getCart = () => document.querySelector('.cart__items');
-
 const addItemToCart = async ({ target }) => {
   const cart = getCart();
   const getId = getSkuFromProductItem(target.parentNode);
   const { id, title, price } = await getItemData(getId);
   cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
   saveCartItems(cart.innerHTML);
+  sumPrices();
+};
+
+const createTotalPriceElement = () => {
+  const cartSec = document.querySelector('.cart');
+  const Btn = document.querySelector('.empty-cart');
+  const totalPrice = document.createElement('p');
+  totalPrice.className = 'total-price';
+  cartSec.appendChild(totalPrice);
+  cartSec.insertBefore(totalPrice, Btn);
 };
 
 const addBtnEvent = () => {
@@ -83,8 +113,14 @@ const emptyCart = () => {
   emptyBtn.addEventListener('click', () => { getCart().innerHTML = ''; });
 };
 
+const loadAsync = async () => {
+  await appendItems();
+};
+
 window.onload = () => { 
-  appendItems();
+  loadAsync();
   addCartItemsEvent();
   emptyCart();
+  createTotalPriceElement();
+  sumPrices();
 };
