@@ -78,7 +78,13 @@ const addCartItemsEvent = () => {
   items.forEach((item) => item.addEventListener('click', cartItemClickListener));
 };
 
+const emptyCart = () => {
+  const emptyBtn = document.querySelector('.empty-cart');
+  emptyBtn.addEventListener('click', () => { getCart().innerHTML = ''; });
+};
+
 window.onload = () => { 
   appendItems();
   addCartItemsEvent();
+  emptyCart();
 };
