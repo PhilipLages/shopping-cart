@@ -12,6 +12,18 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+const getLoadingMsg = () => {
+  const section = document.querySelector('.container');
+  const items = document.querySelector('.items');
+  const message = section.appendChild(createCustomElement('h4', 'loading', 'carregando...'));
+  section.insertBefore(message, items);  
+};
+
+const removeLoadMsg = () => {
+  const message = document.querySelector('.loading');
+  message.remove();
+};
+
 const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
@@ -66,7 +78,9 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 const addItemToCart = async ({ target }) => {
   const cart = getCart();
   const getId = getSkuFromProductItem(target.parentNode);
+  getLoadingMsg();
   const { id, title, price } = await getItemData(getId);
+  removeLoadMsg();
   cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
   saveCartItems(cart.innerHTML);
   sumPrices();
@@ -93,7 +107,9 @@ const getProductsData = async () => {
 
 const appendItems = async () => {
   const items = document.querySelector('.items');
+  getLoadingMsg();
   const data = await getProductsData();
+  removeLoadMsg();
   data.forEach((item) => {
     const { id, title, thumbnail } = item;
     items.appendChild(createProductItemElement({ sku: id, name: title, image: thumbnail }));
