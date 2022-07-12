@@ -46,6 +46,7 @@ const addItemToCart = async ({ target }) => {
   const getId = getSkuFromProductItem(target.parentNode);
   const { id, title, price } = await getItemData(getId);
   cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+  saveCartItems(cart.innerHTML);
 };
 
 const addBtnEvent = () => {
