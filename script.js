@@ -1,7 +1,8 @@
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
+  const imgArg = imageSource.replace('I.jpg', 'W.jpg')
   img.className = 'item__image';
-  img.src = imageSource;
+  img.src = imgArg;
   return img;
 };
 
@@ -13,10 +14,8 @@ const createCustomElement = (element, className, innerText) => {
 };
 
 const getLoadingMsg = () => {
-  const section = document.querySelector('.container');
-  const items = document.querySelector('.items');
-  const message = section.appendChild(createCustomElement('h4', 'loading', 'carregando...'));
-  section.insertBefore(message, items);  
+  const load = document.querySelector('.load');
+  load.appendChild(createCustomElement('h4', 'loading', 'carregando...'));  
 };
 
 const removeLoadMsg = () => {
@@ -59,7 +58,7 @@ const sumPrices = () => {
   const priceSection = document.querySelector('.total-price');
   const prices = getCartPrice();
   const total = prices.reduce((acc, curr) => acc + Number(curr), 0);
-  priceSection.innerText = `${total}`;
+  priceSection.innerText = `Total: $${total.toFixed(2)}`;
 };
 
 const cartItemClickListener = ({ target }) => {
@@ -67,10 +66,17 @@ const cartItemClickListener = ({ target }) => {
   sumPrices();
 }; 
 
-const createCartItemElement = ({ sku, name, salePrice }) => {
+const createCartItemElement = ({ img, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.style.display = 'flex';
+  li.style.flexDirection = 'row-reverse';
+  li.style.justifyContent = 'flex-end';
+  li.style.fontSize = '15px';
+  li.innerText = `${name}
+  
+  Preço: $${salePrice}`;
+  li.appendChild(createProductImageElement(img));
   li.addEventListener('click', cartItemClickListener);
   return li;
 };
@@ -79,9 +85,9 @@ const addItemToCart = async ({ target }) => {
   const cart = getCart();
   const getId = getSkuFromProductItem(target.parentNode);
   getLoadingMsg();
-  const { id, title, price } = await getItemData(getId);
+  const { thumbnail, title, price } = await getItemData(getId);
   removeLoadMsg();
-  cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+  cart.appendChild(createCartItemElement({ img: thumbnail, name: title, salePrice: price }));
   saveCartItems(cart.innerHTML);
   sumPrices();
 };
@@ -117,7 +123,7 @@ const appendItems = async () => {
   addBtnEvent();
 };
 
-const addCartItemsEvent = () => {
+const getFromLocalStorage = () => {
   const cart = getCart();
   cart.innerHTML = getSavedCartItems();
   const items = document.querySelectorAll('.cart__item');
@@ -126,7 +132,10 @@ const addCartItemsEvent = () => {
 
 const emptyCart = () => {
   const emptyBtn = document.querySelector('.empty-cart');
-  emptyBtn.addEventListener('click', () => { getCart().innerHTML = ''; });
+  emptyBtn.addEventListener('click', () => { 
+    getCart().innerHTML = ''; 
+    sumPrices();
+  });  
 };
 
 const loadAsync = async () => {
@@ -135,7 +144,7 @@ const loadAsync = async () => {
 
 window.onload = () => { 
   loadAsync();
-  addCartItemsEvent();
+  getFromLocalStorage();
   emptyCart();
   createTotalPriceElement();
   sumPrices();
