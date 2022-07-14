@@ -6,6 +6,11 @@ For this project at [Trybe](https://www.betrybe.com/), I developed the implement
 ## Lessons Learned
 
 In this project, I developed skills such as API request and test-driven development (TDD) to create secure code
+
+## Demo
+
+<img src='shopping-cart.gif'>
+
 ## API Reference
 
 #### Get all items of selected type, such as "computer", for exemple
