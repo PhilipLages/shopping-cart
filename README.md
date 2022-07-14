@@ -6,6 +6,30 @@ For this project at [Trybe](https://www.betrybe.com/), I developed the implement
 ## Lessons Learned
 
 In this project, I developed skills such as API request and test-driven development (TDD) to create secure code
+## API Reference
+
+#### Get all items of selected type, such as "computer", for exemple
+
+```http
+  https://api.mercadolibre.com/sites/MLB/search?q=$QUERY
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `QUERY` | `string` | **Required**. Your API key to fetch |
+
+#### Get item
+
+```http
+  https://api.mercadolibre.com/items/$ItemID
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `ItemID`      | `string` | **Required**. Id of item to fetch |
+
+
+
 ## 🛠 Skills used
 HTML, CSS, Javascript ES6, Jest and API usage.
 
