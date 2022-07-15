@@ -58,14 +58,3 @@ Install dependencies
 ```bash
   npm install
 ```
-
-
-
-## Running Tests
-
-To run tests, run the following command
-
-```bash
-  npm test
-```
-
